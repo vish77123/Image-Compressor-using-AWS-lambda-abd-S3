@@ -1,0 +1,44 @@
+
+
+service: python-s3-thumbnail
+
+
+
+provider:
+  name: aws
+  runtime: python3.8
+  region: ap-south-1
+  profile: serverless-admin
+  lambdaHashingVersion: '20201221'
+  
+  iamRoleStatements:
+   - Effect: "Allow"
+     Action:
+       - "s3:*"
+     Resource: "*"
+  environment:
+     THUMBNAIL_SIZE: "128"
+
+	
+package:
+  patterns:
+    - '!node_modules/**'
+    - 'node_modules/node-fetch/**'
+
+
+custom:
+  bucket: s3-image-compressor
+
+
+functions:
+  s3-thumbnail-generator:
+    handler: handler.s3_thumbnail_generator
+    events:
+      - s3:
+          bucket: ${self:custom.bucket}
+          event: s3:ObjectCreated:*
+          rules:
+            - suffix: .png
+
+plugins:
+  - serverless-python-requirements

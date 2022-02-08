@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "serverless-python-requirements": "^5.2.2",
+    "watchman": "^1.0.0"
+  }
+}
